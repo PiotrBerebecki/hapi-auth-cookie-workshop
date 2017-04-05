@@ -1,5 +1,6 @@
 const CookieAuth = require('hapi-auth-cookie');
 
+
 const home = {
   method: 'GET',
   path: '/',
@@ -7,6 +8,34 @@ const home = {
     reply.view('index');
   }
 };
+
+const login = {
+  method: 'POST',
+  path: '/login',
+  handler (req, reply) {
+    var username = req.payload.username;
+    var password = req.payload.password;
+    // Database check
+    req.cookieAuth.set({ username: username });
+    reply.view('user-page');
+  }
+};
+
+const authRoute = {
+  method: 'GET',
+  path: '/auth-only',
+  config: {
+    auth: {
+      mode: 'try',
+      strategy: 'base'
+    },
+    handler (request, reply) {
+      reply(request.auth.isAuthenticated
+      ? 'You\'re authenticated :)'
+      : 'You\'re not authenticated :(');
+    }
+  }
+}
 
 const fileServer = {
   method: 'GET',
@@ -16,35 +45,11 @@ const fileServer = {
       path: './public'
     }
   }
-};
-
-const login = {
-  method: 'POST',
-  path: '/login',
-  handler (req, reply) {
-
-    var username = req.payload.username;
-    var password = req.payload.password;
-    console.log(req.cookieAuth.set);
-    req.cookieAuth.set({username});
-
-    reply.view('user-page', {
-      credentials: req.auth.credentials
-    });
-  }
-};
-
-const authRoute = {
-  method: 'GET',
-  path: '/auth-only',
-  handler (request, reply) {
-    reply('You\'re not authenticated :(');
-  }
-};
+}
 
 module.exports = [
   home,
   fileServer,
   login,
   authRoute
-];
+]

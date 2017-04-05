@@ -1,28 +1,27 @@
-const hapi = require('hapi');
+const Hapi = require('hapi');
 const Vision = require('vision');
 const Inert = require('inert');
 const Handlebars = require('handlebars');
-const cookieAuth = require('hapi-auth-cookie');
+const CookieAuth = require('hapi-auth-cookie'); //rm
+
 
 const routes = require('./routes.js');
 
-const server = new hapi.Server();
+const server = new Hapi.Server();
 
 server.connection({
   port: process.env.PORT || 4000
 });
 
-server.register([Vision, Inert, cookieAuth], (err) => {
+server.register([Vision, Inert, CookieAuth], (err) => {
   if (err) throw err;
 
-  var options = {
-    password: 'm!*"2/),p4:xDs%KEgVr7;e#85Ah^WYC',
+  server.auth.strategy('base', 'cookie', 'optional', {   //rm
+    password: 'datagangrulesokdatagangrulesokdatagangrulesok',
     cookie: 'cookie-name',
     isSecure: false,
     ttl: 24 * 60 * 60 * 1000
-  };
-
-  server.auth.strategy('base', 'cookie', options);
+  });
 
   server.views({
     engines: { html: Handlebars },
