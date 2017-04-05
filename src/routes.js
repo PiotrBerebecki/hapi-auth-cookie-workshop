@@ -20,7 +20,17 @@ const login = {
   method: 'POST',
   path: '/login',
   handler (req, reply) {
+
+
+    var username = req.payload.username;
+    var password = req.payload.password;
+    // We would normally check username and password details against database.
+    // If user exists, return an object that uniquely identifies the user.
+    // For this workshop skip this process and set the cookie right away...
+    req.cookieAuth.set(username);
+
     reply.view('user-page');
+
   }
 }
 
