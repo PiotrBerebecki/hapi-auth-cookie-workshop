@@ -22,7 +22,7 @@ server.register([Vision, Inert, cookieAuth], (err) => {
     ttl: 24 * 60 * 60 * 1000
   };
 
-  server.auth.strategy('base', 'cookie', [options]);
+  server.auth.strategy('base', 'cookie', options);
 
   server.views({
     engines: { html: Handlebars },
